@@ -22,12 +22,21 @@ int main(int argc, char** argv) {
     double* others = malloc((commsize - 1) * ((my_end - my_start) * m));
     double* ans_matr = malloc((commsize - 1) * (my_end - my_start));
 
-    if (rank == 0)
-        MPI_
+	MPI_Scatter(&my_matrix, m, MPI_DOUBLE, &others, m, MPI_DOUBLE, 0, MPI_COMM_WORLD);
     for (size_t y = my_start; y <= my_end; y++)
-        {
-            
-        }
+    {
+		double mul;
+		size_t x = y;
+		while (my_matrix[y * m + x] == 0)
+			x++;
+		mul = my_matix[y * m + x] / others[y * m + x];
+		for (;x <= m; x++)
+		{
+			my_matrix[y * m + x] = my_matrix[y * m + x] - others[y * m + x] * mul;
+		}
+		MPI_Scater(my_matrix[y], m, MPI_DOUBLE, &others, m, MPI_DOUBLE, 0, MPI_COMM_WORLD);
+	}
+	   
 
     free(my_matrix);
     free(others);
