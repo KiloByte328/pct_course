@@ -9,7 +9,7 @@ int main(int argc, char** argv) {
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
     size_t n = 10001;
     size_t m = 10001;
-    size_t my_start = rank * (n / commsize);
+    size_t my_start = rank == 0 ? 1 : rank * (n / commsize);
     size_t my_end = rank == commsize - 1 ? ((rank + 1) * (n / commsize) - 1) : n;
     double* my_matrix = malloc((my_end - my_start) * m);
     for (size_t y = 0; y <= (my_end - my_start); y++)
@@ -19,9 +19,15 @@ int main(int argc, char** argv) {
             my_matrix[y * m + x] = (rank + 1) * x;
         }
     }
+    double* others = malloc((commsize - 1) * ((my_end - my_start) * m));
+    double* ans_matr = malloc((commsize - 1) * (my_end - my_start));
 
-    double* others = malloc((commsize - 1) *((my_end - my_start) * m));
-    
+    if (rank == 0)
+        MPI_
+    for (size_t y = my_start; y <= my_end; y++)
+        {
+            
+        }
 
     free(my_matrix);
     free(others);
